@@ -3,7 +3,7 @@ const {merge,Subject} = require('rxjs')
 const {filter, map, switchMap, share, groupBy, takeWhile} = require('rxjs/operators')
 const {paths} = require('./ramda')
 
-const {makeInternal} = require('./ports')
+const {makeInternal,prepare} = require('./ports')
 
 const plug = (func, ...args) =>
   pipe(paths([...args]), apply(func))
@@ -59,4 +59,4 @@ const source = port =>
 const sink = port =>
   port.concat('sink')
 
-module.exports = {plug, compose, portsToContainer, product, source, sink}
+module.exports = {plug, compose, portsToContainer, product, source, sink, prepare}
