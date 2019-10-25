@@ -28,21 +28,12 @@ const portsToContainer = (group$, ports) => {
   return temp.reduce(mergeDeepRight, {})
 }
 
-const product = (stream, ports, root, handler=stream$=>stream$) => {
+const create = (stream, ports, root, handler=stream$=>stream$) => {
   const subject$ = new Subject,
     events$ = subject$.asObservable(),
     group$ = events$.pipe(groupBy(nth(0))),
     container = portsToContainer(group$, makeInternal(ports)),
     stream$ = stream(container)
-
-    // stream$ = stream(Object.assign({}, {
-    //     root:{
-    //       next: {
-    //         sink: subject$.next
-    //       }
-    //     }
-    //   },
-    //   container))
 
   handler(stream$)
     .pipe(takeWhile(pipe(propEq(0, root.terminated.join('.')), not)))
@@ -59,4 +50,4 @@ const source = port =>
 const sink = port =>
   port.concat('sink')
 
-module.exports = {plug, compose, portsToContainer, product, source, sink, prepare}
+module.exports = {plug, compose, portsToContainer, create, source, sink, prepare}
