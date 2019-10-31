@@ -39,7 +39,7 @@ const create = (stream, ports, root, handler=stream$=>stream$) => {
     .pipe(takeWhile(pipe(propEq(0, root.terminated.join('.')), not)))
     .subscribe(subject$)
 
-  subject$.next([root.init.join('.')])
+  subject$.next([root.init.join('.'), true])
 
   return subject$
 }
